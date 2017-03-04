@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Registration/Login</title>
+  </head>
+  <body>
+
+    {% if messages %}
+      <ul>
+        {% for msg in messages %}
+          <li>  {{msg.message}}  </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form action = "/validator" method = "post">
+      {% csrf_token %}
+
+      <h2>Registration</h2>
+
+      <label for "first_name">First Name: </label>
+      <input type = "text" name = "first_name">
+
+      <label for "last_name">Last Name: </label>
+      <input type = "text" name = "last_name">
+
+      <label for "email">Email: </label>
+      <input type = "text" name = "email">
+
+      <label for "password">Password: </label>
+      <input type = "password" name = "password">
+
+      <label for "password2">Confirm Password: </label>
+      <input type = "password" name = "password2">
+
+      <input type = "submit" value = "Register">
+
+    </form>
+
+    <form action = "/login" method = "post">
+      {% csrf_token %}
+
+      <h2>Login</h2>
+
+      <label for "email">Email: </label>
+      <input type = "text" name = "email">
+
+      <label for "password">Password: </label>
+      <input type = "password" name = "password">
+
+      <input type = "submit" value = "Login">
+
+    </form>
+
+  </body>
+</html>

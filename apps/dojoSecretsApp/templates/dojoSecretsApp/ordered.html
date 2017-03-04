@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dojo Secrets</title>
+  </head>
+  <body>
+
+    {% if messages %}
+      <ul>
+        {% for msg in messages %}
+          <li>  {{msg.message}}  </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form action = "/logout">
+      {% csrf_token %}
+      <input type = "submit" value = "Log out">
+    </form>
+
+    <form action = "/success">
+      {% csrf_token %}
+      <input type = "submit" value = "Back">
+    </form>
+
+    <h3>Most Popular Secrets</h3>
+
+    <br>
+
+    {% for i in allSecrets %}
+
+      <h4> {{ i.content }} &nbsp <span style = "font-weight:normal"> Posted at ({{i.created_at}}) &nbsp Last updated at {{i.updated_at}} </span> </h4>
+
+      {% if i.liker.count == 1 %}
+        <h5> {{ i.liker.count }} like </h5>
+      {% else %}
+        <h5> {{ i.liker.count }} likes </h5>
+      {% endif %}
+
+      {% if selection != i.creator %}
+        {% if selection not in i.liker.all %}
+          <form action = "/like" method = "post">
+            {% csrf_token %}
+            <input type = "hidden" name = "secret_id" value = {{i.id}}>
+            <input type = "hidden" name = "page" value = 2>
+            <input type = "submit" value = "Like">
+          </form>
+        {% else %}
+          <h5>You liked this</h5>
+        {% endif %}
+      {% else %}
+        <h5>You posted this</h5>
+        <form action = "/update" method = "post">
+          {% csrf_token %}
+          <label for "newcontent">Edit this post?</label>
+          <input type = "text" name = "newcontent" value = "{{i.content}}">
+          <input type = "hidden" name = "secret_id" value = {{i.id}}>
+          <input type = "hidden" name = "page" value = 2>
+          <input type = "submit" value = "Update">
+        </form>
+        <br>
+        <form action = "/delete" method = "post">
+          {% csrf_token %}
+          <input type = "hidden" name = "secret_id" value = {{i.id}}>
+          <input type = "hidden" name = "page" value = 2>
+          <input type = "submit" value = "Delete">
+        </form>
+      {% endif %}
+      <br><br><br>
+    {% endfor %}
+
+  </body>
+</html>
